@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>宿舍管理系统 · Dormitory Management System</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231E3A5F'/%3E%3Cpath d='M8 24V11l8-4 8 4v13h-5v-7h-6v7z' fill='%23ffffff'/%3E%3C/svg%3E">
+<style>
+  :root{
+    --navy:#1E3A5F;
+    --navy-2:#16293F;
+    --blue:#2F6FED;
+    --cyan:#0EA5A4;
+    --amber:#F59E0B;
+    --ink:#1F2937;
+    --muted:#64748B;
+    --bg:#F6F8FB;
+    --card:#FFFFFF;
+    --line:#E3E9F2;
+    --radius:14px;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    font-family:"Segoe UI","Microsoft YaHei","PingFang SC","Noto Sans SC",system-ui,sans-serif;
+    background:var(--bg);color:var(--ink);line-height:1.65;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:var(--blue);text-decoration:none;}
+  a:hover{text-decoration:underline;}
+
+  /* ===== Hero ===== */
+  .hero{
+    position:relative;overflow:hidden;
+    background:linear-gradient(135deg,var(--navy-2) 0%,var(--navy) 55%,#23497A 100%);
+    color:#fff;padding:88px 24px 76px;
+  }
+  .hero::before{
+    content:"";position:absolute;inset:0;
+    background-image:radial-gradient(rgba(255,255,255,.09) 1px,transparent 1px);
+    background-size:26px 26px;
+    mask-image:linear-gradient(120deg,rgba(0,0,0,.9),transparent 75%);
+    -webkit-mask-image:linear-gradient(120deg,rgba(0,0,0,.9),transparent 75%);
+    pointer-events:none;
+  }
+  .hero-inner{position:relative;max-width:1080px;margin:0 auto;text-align:center;}
+  .hero .tag{
+    display:inline-block;font-size:13px;letter-spacing:1px;
+    color:#BFD7FF;background:rgba(255,255,255,.10);
+    border:1px solid rgba(255,255,255,.22);
+    padding:6px 14px;border-radius:999px;margin-bottom:22px;
+  }
+  .hero h1{font-size:46px;font-weight:800;letter-spacing:1px;line-height:1.25;}
+  .hero h1 .en{display:block;font-size:17px;font-weight:400;color:#9FB8DE;letter-spacing:2px;margin-top:12px;}
+  .hero p.sub{max-width:640px;margin:22px auto 0;font-size:16px;color:#D6E2F5;}
+  .hero .stats{
+    display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin-top:36px;
+  }
+  .hero .stat{
+    background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.16);
+    border-radius:12px;padding:16px 30px;min-width:120px;
+  }
+  .hero .stat b{display:block;font-size:28px;font-weight:800;color:#fff;}
+  .hero .stat span{font-size:13px;color:#AEC4E6;}
+  .hero .cta{display:flex;justify-content:center;gap:14px;flex-wrap:wrap;margin-top:38px;}
+  .btn{
+    display:inline-flex;align-items:center;gap:8px;
+    font-size:15px;font-weight:600;padding:12px 26px;border-radius:10px;
+    transition:transform .15s ease,box-shadow .15s ease;
+  }
+  .btn:hover{transform:translateY(-2px);text-decoration:none;}
+  .btn-primary{background:#fff;color:var(--navy);box-shadow:0 4px 18px rgba(0,0,0,.18);}
+  .btn-primary:hover{box-shadow:0 8px 24px rgba(0,0,0,.26);}
+  .btn-ghost{background:transparent;color:#fff;border:1px solid rgba(255,255,255,.45);}
+  .btn-ghost:hover{background:rgba(255,255,255,.10);}
+  .btn svg{width:16px;height:16px;flex:none;}
+
+  /* ===== Sections ===== */
+  .wrap{max-width:1080px;margin:0 auto;padding:64px 24px;}
+  .sec-title{font-size:26px;font-weight:800;color:var(--navy);letter-spacing:.5px;}
+  .sec-desc{color:var(--muted);font-size:14px;margin-top:8px;max-width:560px;}
+
+  /* 功能一览 */
+  .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:28px;}
+  .card{
+    background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+    padding:22px 22px 20px;transition:box-shadow .15s ease,transform .15s ease;
+  }
+  .card:hover{box-shadow:0 10px 28px rgba(30,58,95,.10);transform:translateY(-3px);}
+  .card .ic{
+    width:42px;height:42px;border-radius:11px;display:flex;align-items:center;justify-content:center;
+    margin-bottom:14px;
+  }
+  .card .ic svg{width:22px;height:22px;}
+  .card h3{font-size:16px;font-weight:700;color:var(--ink);}
+  .card p{font-size:14px;color:var(--muted);margin-top:6px;}
+  .ic-blue{background:#E8F0FE;color:var(--blue);}
+  .ic-cyan{background:#E0F6F5;color:var(--cyan);}
+  .ic-amber{background:#FDF1DE;color:#D97706;}
+  .ic-navy{background:#E6ECF5;color:var(--navy);}
+
+  /* 技术栈 */
+  .stack{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:28px;}
+  .stack .col{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:22px;}
+  .stack h4{font-size:14px;font-weight:700;color:var(--navy);margin-bottom:12px;display:flex;align-items:center;gap:8px;}
+  .stack h4 .dot{width:8px;height:8px;border-radius:50%;flex:none;}
+  .stack .badges{display:flex;flex-wrap:wrap;gap:8px;}
+  .stack .badge{
+    font-size:14px;color:var(--ink);background:#F0F4FA;
+    border:1px solid var(--line);border-radius:8px;padding:5px 11px;
+  }
+
+  /* 架构图 */
+  .arch{
+    margin-top:28px;background:linear-gradient(120deg,#16293F,#1E3A5F);
+    border-radius:var(--radius);padding:28px;color:#fff;
+    display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap;
+  }
+  .arch .t{font-size:17px;font-weight:700;}
+  .arch .d{font-size:14px;color:#C4D4EE;margin-top:6px;max-width:520px;}
+  .arch a.btn{
+    background:#fff;color:var(--navy);font-size:14px;padding:10px 20px;border-radius:9px;font-weight:600;
+    white-space:nowrap;display:inline-flex;align-items:center;gap:7px;
+  }
+  .arch a.btn:hover{text-decoration:none;transform:translateY(-2px);}
+
+  /* 接口表 */
+  .table-wrap{overflow-x:auto;margin-top:28px;background:var(--card);border:1px solid var(--line);border-radius:var(--radius);}
+  table{width:100%;border-collapse:collapse;table-layout:fixed;min-width:560px;}
+  colgroup col:nth-child(1){width:16%;}
+  colgroup col:nth-child(2){width:40%;}
+  colgroup col:nth-child(3){width:44%;}
+  th{
+    background:#F0F4FA;text-align:left;font-size:13px;color:var(--navy);
+    padding:12px 16px;border-bottom:1px solid var(--line);font-weight:700;
+  }
+  td{padding:11px 16px;font-size:14px;border-bottom:1px solid #EFF3F9;color:var(--ink);}
+  tr:last-child td{border-bottom:none;}
+  td code{
+    font-family:Consolas,"Courier New",monospace;font-size:12.5px;color:#0B5394;
+    background:#EFF5FE;border-radius:5px;padding:2px 7px;
+  }
+  .m-method{font-weight:700;font-size:12px;color:#fff;border-radius:5px;padding:3px 8px;display:inline-block;}
+  .m-get{background:var(--cyan);}
+  .m-post{background:var(--amber);}
+  .m-crud{background:var(--blue);}
+
+  /* 环境要求 */
+  .env{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:28px;}
+  .env .item{
+    background:var(--card);border:1px solid var(--line);border-radius:12px;
+    padding:14px 18px;display:flex;align-items:center;gap:12px;font-size:14px;
+  }
+  .env .item svg{width:18px;height:18px;color:var(--blue);flex:none;}
+  .env .item b{color:var(--ink);}
+  .env .item span{color:var(--muted);}
+
+  footer{
+    background:var(--navy-2);color:#9FB8DE;text-align:center;
+    padding:34px 24px;font-size:13px;line-height:1.9;
+  }
+  footer a{color:#D6E2F5;}
+  footer .repo{margin-bottom:8px;}
+
+  @media (max-width:860px){
+    .hero h1{font-size:34px;}
+    .cards,.stack{grid-template-columns:1fr;}
+    .env{grid-template-columns:1fr;}
+    .hero{padding:64px 20px 56px;}
+    .wrap{padding:48px 20px;}
+  }
+  @media (prefers-reduced-motion:reduce){
+    html{scroll-behavior:auto;}
+    .card:hover,.btn:hover,.arch a.btn:hover{transform:none;}
+  }
+</style>
+</head>
+<body>
+
+<!-- ===== Hero ===== -->
+<header class="hero">
+  <div class="hero-inner">
+    <div class="tag">前后端分离 · Spring Boot + Vue 3</div>
+    <h1>宿舍管理系统
+      <span class="en">DORMITORY MANAGEMENT SYSTEM</span>
+    </h1>
+    <p class="sub">面向校园场景的一体化宿舍管理平台：楼栋、房间、床位、入住与报修全流程数字化管理，适合课程设计与毕业设计项目。</p>
+    <div class="stats">
+      <div class="stat"><b>6</b><span>功能模块</span></div>
+      <div class="stat"><b>3</b><span>宿舍楼栋</span></div>
+      <div class="stat"><b>108</b><span>房间</span></div>
+      <div class="stat"><b>260</b><span>学生</span></div>
+    </div>
+    <div class="cta">
+      <a class="btn btn-primary" href="https://github.com/hua-1a/dormitory-system" target="_blank" rel="noopener">
+        <svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+        查看 GitHub 仓库
+      </a>
+      <a class="btn btn-ghost" href="architecture.html">
+        <svg viewBox="0 0 16 16" fill="currentColor"><path d="M1 3h5v2H1V3zm9 0h5v2h-5V3zM1 7h5v2H1V7zm9 0h5v2h-5V7zm-9 4h5v2H1v-2zm9 0h5v2h-5v-2z"/></svg>
+        查看系统架构图
+      </a>
+    </div>
+  </div>
+</header>
+
+<!-- ===== 功能一览 ===== -->
+<section class="wrap">
+  <h2 class="sec-title">功能一览</h2>
+  <p class="sec-desc">覆盖宿舍管理核心场景，六个模块相互联动，数据全流程闭环。</p>
+  <div class="cards">
+    <div class="card">
+      <div class="ic ic-blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></svg></div>
+      <h3>首页看板</h3>
+      <p>统计卡片（学生 / 楼栋 / 房间 / 床位 / 入住率）+ ECharts 图表（楼栋入住、性别分布、报修状态）+ 近期入住动态</p>
+    </div>
+    <div class="card">
+      <div class="ic ic-cyan"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.4 3.4-5 6.5-5s5.7 1.6 6.5 5"/><circle cx="17.5" cy="9" r="2.5"/><path d="M15 20c.5-2.6 2.3-3.9 4.5-3.9S22 17.4 22.5 20"/></svg></div>
+      <h3>学生管理</h3>
+      <p>增删改查、学号 / 姓名搜索、性别筛选、分页展示</p>
+    </div>
+    <div class="card">
+      <div class="ic ic-amber"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21V9l9-6 9 6v12"/><path d="M9 21v-6h6v6"/><path d="M3 21h18"/></svg></div>
+      <h3>宿舍楼栋</h3>
+      <p>楼栋增删改查、入住率进度条直观展示</p>
+    </div>
+    <div class="card">
+      <div class="ic ic-navy"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M4 9h16"/><path d="M9 3v6"/><path d="M15 3v6"/><path d="M9 13h.01M15 13h.01M9 17h.01M15 17h.01"/></svg></div>
+      <h3>房间管理</h3>
+      <p>房间新增 / 删除、启用 / 停用、按楼栋筛选</p>
+    </div>
+    <div class="card">
+      <div class="ic ic-cyan"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 3 3 12l6 1.5L10.5 21 21 3z"/><path d="M9 13.5 15.5 7.5"/></svg></div>
+      <h3>入住管理</h3>
+      <p>办理入住 / 办理退宿，自动更新床位占用并留痕</p>
+    </div>
+    <div class="card">
+      <div class="ic ic-blue"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a4.5 4.5 0 0 0-6 6L3 18l3 3 5.7-5.7a4.5 4.5 0 0 0 6-6l-3 3-2.6-2.6 3-3z"/></svg></div>
+      <h3>报修管理</h3>
+      <p>报修提交、状态流转（待处理 → 处理中 → 已完成）</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 技术栈 ===== -->
+<section class="wrap" style="padding-top:0;">
+  <h2 class="sec-title">技术栈</h2>
+  <p class="sec-desc">主流前后端分离技术组合，工程结构清晰、易于二次开发。</p>
+  <div class="stack">
+    <div class="col">
+      <h4><span class="dot" style="background:var(--blue);"></span>后端</h4>
+      <div class="badges">
+        <span class="badge">Spring Boot 2.7.18</span>
+        <span class="badge">MyBatis-Plus 3.5.3.1</span>
+        <span class="badge">MySQL 8.0</span>
+        <span class="badge">Lombok</span>
+      </div>
+    </div>
+    <div class="col">
+      <h4><span class="dot" style="background:var(--cyan);"></span>前端</h4>
+      <div class="badges">
+        <span class="badge">Vue 3</span>
+        <span class="badge">Vite 5</span>
+        <span class="badge">Vue Router 4</span>
+        <span class="badge">Element Plus</span>
+        <span class="badge">ECharts</span>
+        <span class="badge">Axios</span>
+      </div>
+    </div>
+    <div class="col">
+      <h4><span class="dot" style="background:var(--amber);"></span>工具</h4>
+      <div class="badges">
+        <span class="badge">IntelliJ IDEA</span>
+        <span class="badge">Navicat / MySQL Workbench</span>
+        <span class="badge">Maven</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 架构图 ===== -->
+<section class="wrap" style="padding-top:0;">
+  <h2 class="sec-title">系统架构</h2>
+  <p class="sec-desc">前后端分离架构，前端经代理转发请求，后端分层组织，数据库统一管理。</p>
+  <div class="arch">
+    <div>
+      <div class="t">宿舍管理系统架构图</div>
+      <div class="d">完整展示浏览器 → 前端页面 → REST API → 业务层 → 数据访问层 → MySQL 的整体调用链路与分层设计。</div>
+    </div>
+    <a class="btn" href="architecture.html">
+      <svg viewBox="0 0 16 16" fill="currentColor"><path d="M10.6 5.4a1 1 0 1 1 1.4-1.4l3.5 3.5a1 1 0 0 1 0 1.4l-3.5 3.5a1 1 0 1 1-1.4-1.4L12.6 9H1a1 1 0 0 1 0-2h11.6L10.6 5.4z"/></svg>
+      打开架构图
+    </a>
+  </div>
+</section>
+
+<!-- ===== 主要接口 ===== -->
+<section class="wrap" style="padding-top:0;">
+  <h2 class="sec-title">主要接口</h2>
+  <p class="sec-desc">后端提供统一的 REST API，返回结构化的 JSON 数据。</p>
+  <div class="table-wrap">
+    <table>
+      <colgroup><col><col><col></colgroup>
+      <thead>
+        <tr><th>方法</th><th>路径</th><th>说明</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><span class="m-method m-post">POST</span></td><td><code>/api/login</code></td><td>登录</td></tr>
+        <tr><td><span class="m-method m-get">GET</span></td><td><code>/api/dashboard/stats</code></td><td>首页看板统计</td></tr>
+        <tr><td><span class="m-method m-crud">增删改查</span></td><td><code>/api/students</code></td><td>学生管理</td></tr>
+        <tr><td><span class="m-method m-crud">增删改查</span></td><td><code>/api/dormitories</code></td><td>楼栋管理</td></tr>
+        <tr><td><span class="m-method m-crud">增删改查</span></td><td><code>/api/rooms</code></td><td>房间管理</td></tr>
+        <tr><td><span class="m-method m-get">GET</span></td><td><code>/api/rooms/options</code></td><td>可入住房间</td></tr>
+        <tr><td><span class="m-method m-post">POST</span></td><td><code>/api/checkins</code></td><td>办理入住</td></tr>
+        <tr><td><span class="m-method m-post">POST</span></td><td><code>/api/checkins/checkout</code></td><td>办理退宿</td></tr>
+        <tr><td><span class="m-method m-crud">增删改查</span></td><td><code>/api/repairs</code></td><td>报修管理</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ===== 环境要求 ===== -->
+<section class="wrap" style="padding-top:0;">
+  <h2 class="sec-title">运行环境要求</h2>
+  <p class="sec-desc">项目可在本机完整运行，环境要求如下。</p>
+  <div class="env">
+    <div class="item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="8" width="20" height="12" rx="2"/><path d="M6 8V6a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v2"/></svg>
+      <span><b>JDK 8+</b>（本机实测 JDK 19 可运行）</span>
+    </div>
+    <div class="item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v16H4z"/><path d="M4 9h16"/><path d="M9 4v16"/></svg>
+      <span><b>Maven 3.6+</b>（IDEA 自带 Maven 也可）</span>
+    </div>
+    <div class="item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v14c0 1.66 3.58 3 8 3s8-1.34 8-3V5"/><path d="M4 12c0 1.66 3.58 3 8 3s8-1.34 8-3"/></svg>
+      <span><b>MySQL 5.7+ / 8.0</b></span>
+    </div>
+    <div class="item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a4 4 0 0 1 4 4c0 1.1-.45 2.1-1.17 2.83L17 11a6 6 0 0 1-4 4v3h4v2H7v-2h4v-3a6 6 0 0 1-4-4l2.17-2.17A4 4 0 0 1 12 2z"/><circle cx="12" cy="6" r="1.2"/></svg>
+      <span><b>Node.js 16+</b>、npm 8+</span>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="repo"><a href="https://github.com/hua-1a/dormitory-system" target="_blank" rel="noopener">github.com/hua-1a/dormitory-system</a></div>
+  <div>宿舍管理系统 · Dormitory Management System · 前后端分离课程设计项目</div>
+</footer>
+
+</body>
+</html>
