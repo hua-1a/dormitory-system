@@ -48,38 +48,6 @@ dormitory-system
         └── utils/request.js      # Axios 封装
 ```
 
-## 🚀 快速启动
-
-### 1. 初始化数据库
-
-用 Navicat / MySQL Workbench / 命令行执行 `sql/dorm.sql`：
-
-```bash
-mysql -uroot -p < sql/dorm.sql
-```
-
-> 脚本会删除并重建 `dorm_manage` 数据库，内置 3 栋楼、108 个房间、260 名学生等示例数据。
-> 默认账号：**admin**，密码：**123456**（MD5 加密存储）。
-
-### 2. 启动后端（IDEA）
-
-1. `File → Open` 选择 `backend` 目录（或直接打开整个 `dormitory-system` 项目）
-2. 等待 Maven 自动下载依赖（首次较慢）
-3. 修改 `backend/src/main/resources/application.yml` 中的数据库用户名 / 密码
-4. 运行 `com.dorm.DormApplication`，控制台输出「宿舍管理系统后端启动成功」即可
-
-### 3. 启动前端
-
-```bash
-cd frontend
-npm install        # 安装依赖
-npm run dev        # 启动开发服务器
-```
-
-浏览器访问 **http://localhost:5173**，使用 admin / 123456 登录。
-
-> 前端开发服务器已配置代理：`/api` 自动转发到 `http://localhost:8080`，无需额外跨域处理。
-
 ## 🔌 主要接口
 
 | 方法 | 路径 | 说明 |
@@ -93,12 +61,6 @@ npm run dev        # 启动开发服务器
 | POST | /api/checkins | 办理入住 |
 | POST | /api/checkins/checkout | 办理退宿 |
 | GET/POST/PUT/DELETE | /api/repairs | 报修管理 |
-
-## 📝 二次开发建议
-
-- 登录目前为轻量实现（前端存储用户信息），如需更严谨可引入 JWT + 拦截器
-- 学生入住逻辑在 `CheckInService` 中以事务保证数据一致性，可作为扩展点
-- 首页图表数据来自 `/api/dashboard/stats`，新增统计项只需在 `DashboardService` 中扩展
 
 ## ⚠️ 环境要求
 
