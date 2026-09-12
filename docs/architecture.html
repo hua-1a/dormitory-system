@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>宿舍管理系统架构图</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'PingFang SC', 'Microsoft YaHei', 'Helvetica Neue', Arial, sans-serif;
+    background: #f0f2f5;
+    padding: 24px;
+    color: #303133;
+  }
+  .wrap { max-width: 960px; margin: 0 auto; }
+  .title { text-align: center; margin-bottom: 6px; }
+  .title h1 { font-size: 24px; color: #1f2d3d; }
+  .title p { font-size: 14px; color: #909399; margin-top: 6px; }
+
+  /* 层容器 */
+  .layer {
+    border-radius: 12px;
+    padding: 18px 20px;
+    box-shadow: 0 4px 14px rgba(0, 21, 41, 0.08);
+    border: 1px solid transparent;
+  }
+  .layer-front { background: linear-gradient(135deg, #ffffff, #eaf3ff); border-color: #b3d8ff; }
+  .layer-back  { background: linear-gradient(135deg, #ffffff, #f5f7fa); border-color: #dcdfe6; }
+  .layer-db    { background: linear-gradient(135deg, #fdf6ec, #fff7e6); border-color: #f3d19e; }
+
+  .layer-head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+  .layer-tag {
+    font-size: 15px;
+    font-weight: 700;
+    color: #fff;
+    padding: 5px 14px;
+    border-radius: 6px;
+  }
+  .tag-front { background: #409eff; }
+  .tag-back  { background: #303133; }
+  .tag-db    { background: #e6a23c; }
+  .layer-sub { font-size: 13px; color: #909399; }
+
+  /* 功能模块 */
+  .modules { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 14px; }
+  .module {
+    flex: 1 1 110px;
+    min-width: 110px;
+    text-align: center;
+    padding: 12px 8px;
+    border-radius: 8px;
+    background: #fff;
+    border: 1px solid #e4e7ed;
+    font-size: 14px;
+    color: #303133;
+  }
+  .module b { display: block; font-size: 15px; margin-bottom: 4px; }
+  .module .en { font-size: 12px; color: #a8abb2; }
+
+  /* 技术栈行 */
+  .tech {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+  }
+  .badge {
+    font-size: 13px;
+    padding: 4px 12px;
+    border-radius: 20px;
+    background: #ecf5ff;
+    color: #409eff;
+    border: 1px solid #d9ecff;
+  }
+  .badge.gray { background: #f4f4f5; color: #606266; border-color: #e4e7ed; }
+  .badge.orange { background: #fdf6ec; color: #e6a23c; border-color: #f5dab1; }
+
+  /* 内部管道 */
+  .inner-flow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    background: rgba(255,255,255,0.6);
+    border-radius: 8px;
+    padding: 10px;
+    border: 1px dashed #c0c4cc;
+    font-size: 14px;
+    flex-wrap: wrap;
+  }
+  .inner-flow .node {
+    background: #fff;
+    border: 1px solid #dcdfe6;
+    border-radius: 6px;
+    padding: 6px 14px;
+    font-size: 14px;
+  }
+  .inner-flow .arrow { color: #c0c4cc; font-size: 18px; }
+
+  /* 连接箭头 */
+  .connector {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 6px 0;
+    color: #909399;
+  }
+  .connector .line { width: 2px; height: 18px; background: #c0c4cc; }
+  .connector .label {
+    font-size: 13px;
+    background: #fff;
+    border: 1px solid #e4e7ed;
+    border-radius: 14px;
+    padding: 2px 12px;
+    margin: 4px 0;
+    color: #606266;
+  }
+  .connector .arrow-down { width: 0; height: 0; border-left: 8px solid transparent; border-right: 8px solid transparent; border-top: 10px solid #c0c4cc; }
+
+  /* 数据库表 */
+  .tables { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+  .table-item {
+    font-size: 13px;
+    background: #fff;
+    border: 1px solid #f3d19e;
+    border-radius: 6px;
+    padding: 6px 12px;
+    color: #7a5c1e;
+  }
+
+  .note {
+    margin-top: 16px;
+    font-size: 13px;
+    color: #909399;
+    text-align: center;
+    line-height: 1.8;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="title">
+    <h1>宿舍管理系统 · 前后端分离架构</h1>
+    <p>Spring Boot + MyBatis-Plus + MySQL 8.0 ｜ Vue 3 + Vite + Element Plus + ECharts ｜ 开发工具：IntelliJ IDEA</p>
+  </div>
+
+  <!-- 前端层 -->
+  <div class="layer layer-front">
+    <div class="layer-head">
+      <span class="layer-tag tag-front">前端 Vue 3</span>
+      <span class="layer-sub">浏览器访问 http://localhost:5173（Vite 开发服务器）</span>
+    </div>
+    <div class="modules">
+      <div class="module"><b>登录页</b><span class="en">Login</span></div>
+      <div class="module"><b>首页看板</b><span class="en">Dashboard</span></div>
+      <div class="module"><b>学生管理</b><span class="en">Student</span></div>
+      <div class="module"><b>宿舍楼栋</b><span class="en">Dormitory</span></div>
+      <div class="module"><b>房间管理</b><span class="en">Room</span></div>
+      <div class="module"><b>入住管理</b><span class="en">CheckIn</span></div>
+      <div class="module"><b>报修管理</b><span class="en">Repair</span></div>
+    </div>
+    <div class="tech">
+      <span class="badge">Vue 3</span>
+      <span class="badge">Vue Router 4（路由守卫）</span>
+      <span class="badge">Element Plus</span>
+      <span class="badge">ECharts 5（看板图表）</span>
+      <span class="badge">Axios（统一 /api 封装）</span>
+      <span class="badge gray">localStorage 保存登录态</span>
+    </div>
+  </div>
+
+  <!-- 连接：前端 → 后端 -->
+  <div class="connector">
+    <div class="line"></div>
+    <div class="label">Axios 请求 /api/* → Vite 代理 → http://localhost:8080</div>
+    <div class="line"></div>
+    <div class="arrow-down"></div>
+  </div>
+
+  <!-- 后端层 -->
+  <div class="layer layer-back">
+    <div class="layer-head">
+      <span class="layer-tag tag-back">后端 Spring Boot</span>
+      <span class="layer-sub">端口 8080 ｜ IDEA 运行 com.dorm.DormApplication</span>
+    </div>
+    <div class="inner-flow">
+      <div class="node">Controller<br><span style="font-size:12px;color:#909399">REST /api 接口</span></div>
+      <div class="arrow">→</div>
+      <div class="node">Service<br><span style="font-size:12px;color:#909399">业务逻辑 · 事务</span></div>
+      <div class="arrow">→</div>
+      <div class="node">Mapper<br><span style="font-size:12px;color:#909399">MyBatis-Plus</span></div>
+    </div>
+    <div class="tech" style="margin-top:12px">
+      <span class="badge">Spring Boot 2.7.18</span>
+      <span class="badge">MyBatis-Plus 3.5.3</span>
+      <span class="badge">Lombok</span>
+      <span class="badge gray">CORS 跨域配置</span>
+      <span class="badge gray">全局异常处理 Result 统一返回</span>
+    </div>
+  </div>
+
+  <!-- 连接：后端 → 数据库 -->
+  <div class="connector">
+    <div class="line"></div>
+    <div class="label">JDBC + MyBatis-Plus（分页插件）</div>
+    <div class="line"></div>
+    <div class="arrow-down"></div>
+  </div>
+
+  <!-- 数据库层 -->
+  <div class="layer layer-db">
+    <div class="layer-head">
+      <span class="layer-tag tag-db">MySQL 8.0</span>
+      <span class="layer-sub">数据库：dorm_manage（由 sql/dorm.sql 初始化，含示例数据）</span>
+    </div>
+    <div class="tables">
+      <div class="table-item">sys_user 用户</div>
+      <div class="table-item">student 学生</div>
+      <div class="table-item">dormitory 楼栋</div>
+      <div class="table-item">room 房间</div>
+      <div class="table-item">check_in_record 入住记录</div>
+      <div class="table-item">repair_record 报修记录</div>
+    </div>
+  </div>
+
+  <div class="note">
+    核心流程：管理员登录（admin / 123456）→ 首页看板展示统计与图表 → 学生 / 楼栋 / 房间 / 入住 / 报修全流程管理<br>
+    入住与退宿在 CheckInService 中以事务保证「学生状态 + 房间占用 + 楼栋床位」数据一致
+  </div>
+</div>
+</body>
+</html>
